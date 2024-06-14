@@ -17,14 +17,22 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdbool.h>
+typedef struct	s_philo
+{
+
+}		t_philo;
 
 typedef struct	s_params
 {
-	int	num_philo;
-	int	ttdie;
-	int	tteat;
-	int	ttsleep;
-	int	maxeat;
+	int		philo_num;
+	int		meal_num;
+	int		dead;
+	int		finished;
+	int		t_die;
+	int		t_eat;
+	int		t_sleep;
+	int		t_start;
+	t_philo	*philos;
 }		t_params;
 
 #endif

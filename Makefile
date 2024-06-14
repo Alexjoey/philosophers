@@ -10,11 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC_DIR	= ./srcs
-INC_DIR	= ./includes
+SRC_DIR	= ./src
+INC_DIR	= ./inc
 OBJ_DIR	= ./obj
 
-SRCS	= ./srcs/main.c
+SRCS	= ./src/main.c
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 CC		= cc
 CFLAGS	= -Wextra -Wall -Werror

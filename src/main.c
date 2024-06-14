@@ -10,14 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../inc/philo.h"
 
-bool	checkinput(char **argv)
+bool	checkinput(int argc, char **argv)
 {
 	int	i;
 	int	j;
 
 	j = 0;
+	if (argc != 5 && argc != 6)
+		return (false);
 	while (argv[++j])
 	{
 		i = -1;
@@ -30,15 +32,7 @@ bool	checkinput(char **argv)
 
 int	main(int argc, char **argv)
 {
-	if (argc == 5 || argc == 6)
-	{
-		if (checkinput(argv) == false)
-		{
-			ft_printf("invalid input\n");
-			return (0);
-		}
-		
-	}
-	else
-		ft_printf("wrong argument amount\n");
+	if (checkinput(argc, argv) == false)
+		return (1);
+
 }
