@@ -32,7 +32,12 @@ bool	checkinput(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	if (checkinput(argc, argv) == false)
-		return (1);
+	t_data	data;
 
+	if (checkinput(argc, argv) == false)
+		return (error("Invalid input", NULL));
+	if (init_data(&data, argv, argc) == 1)
+		return (1);
+	free_data(&data);	
+	return (0);
 }
