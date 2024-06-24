@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amylle <alexm@live.be>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/24 23:32:05 by amylle            #+#    #+#             */
+/*   Updated: 2024/06/24 23:32:07 by amylle           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
+#include <pthread.h>
 
 //idk how to fix the uninitialized mutex error
 void	free_data(t_data *data)
@@ -23,8 +36,13 @@ void	free_data(t_data *data)
 
 int	error(char *str, t_data *data)
 {
-	ft_printf("%s\n", str);
 	if (data)
+		pthread_mutex_lock(&data->write);
+	printf("%s\n", str);
+	if (data)
+	{
+		pthread_mutex_unlock(&data->write);
 		free_data(data);
+	}
 	return (1);
 }

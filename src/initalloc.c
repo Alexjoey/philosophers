@@ -1,5 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initalloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amylle <alexm@live.be>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/24 23:33:41 by amylle            #+#    #+#             */
+/*   Updated: 2024/06/24 23:34:08 by amylle           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
 #include <pthread.h>
+
+bool	checkinput(int argc, char **argv)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	if (argc != 5 && argc != 6)
+		return (false);
+	while (argv[++j])
+	{
+		i = -1;
+		while (argv[j][++i])
+			if (ft_isdigit(argv[j][i]) == 0)
+				return (false);
+	}
+	return (true);
+}
 
 int	init_values(t_data *data, char **argv, int argc)
 {
@@ -15,12 +45,14 @@ int	init_values(t_data *data, char **argv, int argc)
 	}
 	else
 		data->meal_num = -1;
-	if (data->philo_num <= 0 || data->philo_num > 200 || data->die_time < 0 || data->eat_time < 0 ||  data->sleep_time < 0)
+	if (data->philo_num <= 0 || data->philo_num > 200 || data->die_time < 0 \
+		|| data->eat_time < 0 || data->sleep_time < 0)
 		return (error("Invalid input", NULL));
 	data->dead = 0;
 	data->num_finished_eating = 0;
 	return (0);
 }
+
 //init to NULL so you can safely free all incase of malloc error
 int	alloc_data(t_data *data)
 {
@@ -77,7 +109,7 @@ int	init_data(t_data *data, char **argv, int argc)
 		return (1);
 	if (alloc_data(data) == 1)
 		return (1);
-	if (init_philos(data))
+	if (init_philos(data) == 1)
 		return (1);
 	return (0);
 }

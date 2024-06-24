@@ -14,10 +14,10 @@ SRC_DIR	= ./src
 INC_DIR	= ./inc
 OBJ_DIR	= ./obj
 
-SRCS	= ./src/main.c ./src/error.c ./src/messages.c ./src/initalloc.c
+SRCS	= ./src/main.c ./src/error.c ./src/messages.c ./src/initalloc.c ./src/threads.c ./src/utils.c
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 CC		= cc
-CFLAGS	= -Wextra -Wall -Werror
+#CFLAGS	= -Wextra -Wall -Werror -g
 INCLUDE	= -Llibft -lft -I$(INC_DIR)
 RM		= rm -rf
 LIBFT	= libft/libft.a
