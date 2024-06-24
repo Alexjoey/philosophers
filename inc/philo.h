@@ -29,8 +29,8 @@ typedef struct s_philo
 	pthread_t			tid_philo;
 	int					num;
 	int					eat_count;
-	pthread_mutex_t		l_fork;
-	pthread_mutex_t		r_fork;
+	pthread_mutex_t		*l_fork;
+	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		lock;
 	unsigned long long	time_to_starve;
 	int					eating;
@@ -60,7 +60,7 @@ int					thread_init(t_data *data);
 unsigned long long	get_time(void);
 void				message(char *str, t_philo *philo);
 void				eat(t_philo *philo);
-void				ft_usleep(useconds_t time);
+int					ft_usleep(useconds_t time);
 bool				checkinput(int argc, char **argv);
 
 #endif

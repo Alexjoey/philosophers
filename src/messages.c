@@ -15,17 +15,22 @@
 void	message(char *str, t_philo *p)
 {
 	pthread_mutex_lock(&p->data->write);
-	if (!ft_strncmp(str, "died", 4))
-		philo->data->dead = 1;
-	printf("%llu %d %s\n", get_time() - p->data->start_time, p->num, str);
+	if (p->data->dead == 0)
+	{
+		printf("%llu %d %s\n", get_time() - p->data->start_time, p->num, str);
+		if (!ft_strncmp(str, "died", 4) && p->data->dead == 0)
+			p->data->dead = 1;
+	}
 	pthread_mutex_unlock(&p->data->write);
 }
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->l_fork);
+	if (philo->l_fork == philo->r_fork)
+		return ;
+	pthread_mutex_lock(philo->l_fork);
 	message("has taken a fork", philo);
-	pthread_mutex_lock(&philo->r_fork);
+	pthread_mutex_lock(philo->r_fork);
 	message("has taken a fork", philo);
 	pthread_mutex_lock(&philo->lock);
 	philo->eating = 1;
@@ -35,6 +40,6 @@ void	eat(t_philo *philo)
 	ft_usleep(philo->data->eat_time);
 	philo->eating = 0;
 	pthread_mutex_unlock(&philo->lock);
-	pthread_mutex_unlock(&philo->l_fork);
-	pthread_mutex_unlock(&philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
 }

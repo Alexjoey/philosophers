@@ -21,7 +21,7 @@ void	*mealchecker(void *param)
 	while (data->dead == 0)
 	{
 		pthread_mutex_lock(&data->philos[0].lock);
-		if (data->num_finished_eating == data->meal_num)
+		if (data->num_finished_eating == data->philo_num)
 			data->dead = 1;
 		pthread_mutex_unlock(&data->philos[0].lock);
 	}
@@ -35,14 +35,16 @@ void	*state_checker(void *param)
 	philo = (t_philo *)param;
 	while (philo->data->dead == 0)
 	{
+		pthread_mutex_lock(&philo->lock);
 		if (get_time() >= philo->time_to_starve && philo->eating == 0)
 			message("died", philo);
 		if (philo->eat_count == philo->data->meal_num)
 		{
+			printf("id: %i, eat count: %i\n", philo->num, philo->eat_count);
 			philo->data->num_finished_eating++;
 			philo->eat_count++;
 		}
-		ft_usleep(1);
+		pthread_mutex_unlock(&philo->lock);
 	}
 	return ((void *) 0);
 }
@@ -57,6 +59,8 @@ void	*routine(void	*param)
 		return ((void *) 1);
 	while (philo->data->dead == 0)
 	{
+		if (&philo->r_fork == &philo->l_fork)
+			return ((void *) 1);
 		eat(philo);
 		message("is sleeping", philo);
 		ft_usleep(philo->data->sleep_time);
@@ -77,12 +81,9 @@ int	thread_init(t_data *data)
 		if (pthread_create(&t0, NULL, &mealchecker, data))
 			return (error("error whilst creating mealchecker", data));
 	i = -1;
-	while (++i < data->philo_num)
-	{
+	while (++i < data->philo_num && !ft_usleep(1))
 		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			return (error("error whilst creating supervisor threads", data));
-		ft_usleep(1);
-	}
 	i = -1;
 	while (++i < data->philo_num)
 		if (pthread_join(data->tid[i], NULL))

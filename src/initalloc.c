@@ -85,14 +85,12 @@ int	init_philos(t_data *data)
 {
 	int		i;
 
-	data->philos[0].l_fork = data->forks[data->philo_num - 1];
 	i = -1;
 	while (++i < data->philo_num)
 	{
 		data->philos[i].data = data;
-		if (i != 0)
-			data->philos[i].l_fork = data->forks[i - 1];
-		data->philos[i].r_fork = data->forks[i];
+		data->philos[i].l_fork = &data->forks[i];
+		data->philos[i].r_fork = &data->forks[(i + 1) % data->philo_num];
 		data->philos[i].num = i + 1;
 		data->philos[i].eating = 0;
 		data->philos[i].eating = 0;
