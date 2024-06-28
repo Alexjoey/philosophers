@@ -58,8 +58,10 @@ void	*state_checker(void *param)
 			message("died", philo);
 		if (philo->eat_count == philo->data->meal_num)
 		{
+			pthread_mutex_lock(&philo->data->lock);
 			philo->data->num_finished_eating++;
 			philo->eat_count++;
+			pthread_mutex_unlock(&philo->data->lock);
 		}
 		pthread_mutex_unlock(&philo->lock);
 	}

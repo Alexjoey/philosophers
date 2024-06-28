@@ -17,7 +17,7 @@ OBJ_DIR	= ./obj
 SRCS	= ./src/main.c ./src/threads.c ./src/utils.c
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 CC		= cc
-#CFLAGS	= -Wextra -Wall -Werror -g
+CFLAGS	= -Wextra -Wall -Werror
 INCLUDE	= -Llibft -lft -I$(INC_DIR)
 RM		= rm -rf
 LIBFT	= libft/libft.a
