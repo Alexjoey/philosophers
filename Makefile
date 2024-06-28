@@ -18,7 +18,7 @@ SRCS	= ./src/main.c ./src/threads.c ./src/utils.c
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 CC		= cc
 CFLAGS	= -Wextra -Wall -Werror
-INCLUDE	= -Llibft -lft -I$(INC_DIR)
+INCLUDE	= -Llibft -lft -I$(INC_DIR) -pthread
 RM		= rm -rf
 LIBFT	= libft/libft.a
 MAKEFLAGS += --no-print-directory
