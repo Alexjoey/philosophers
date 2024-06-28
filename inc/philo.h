@@ -53,7 +53,6 @@ typedef struct s_data
 	pthread_mutex_t		lock;
 }						t_data;
 
-int					init_data(t_data *data, char **argv, int argc);
 int					error(char *str, t_data *data);
 void				free_data(t_data *data);
 int					thread_init(t_data *data);
@@ -61,6 +60,5 @@ unsigned long long	get_time(void);
 void				message(char *str, t_philo *philo);
 void				eat(t_philo *philo);
 int					ft_usleep(useconds_t time);
-bool				checkinput(int argc, char **argv);
 
 #endif

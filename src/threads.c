@@ -13,6 +13,26 @@
 #include "../inc/philo.h"
 #include <pthread.h>
 
+void	eat(t_philo *philo)
+{
+	if (philo->l_fork == philo->r_fork)
+		return ;
+	pthread_mutex_lock(philo->l_fork);
+	message("has taken a fork", philo);
+	pthread_mutex_lock(philo->r_fork);
+	message("has taken a fork", philo);
+	pthread_mutex_lock(&philo->lock);
+	philo->eating = 1;
+	philo->time_to_starve = get_time() + philo->data->die_time;
+	message("is eating", philo);
+	philo->eat_count++;
+	ft_usleep(philo->data->eat_time);
+	philo->eating = 0;
+	pthread_mutex_unlock(&philo->lock);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
+
 void	*mealchecker(void *param)
 {
 	t_data	*data;
@@ -20,10 +40,8 @@ void	*mealchecker(void *param)
 	data = (t_data *)param;
 	while (data->dead == 0)
 	{
-		pthread_mutex_lock(&data->philos[0].lock);
 		if (data->num_finished_eating == data->philo_num)
 			data->dead = 1;
-		pthread_mutex_unlock(&data->philos[0].lock);
 	}
 	return ((void *)0);
 }
@@ -40,7 +58,6 @@ void	*state_checker(void *param)
 			message("died", philo);
 		if (philo->eat_count == philo->data->meal_num)
 		{
-			printf("id: %i, eat count: %i\n", philo->num, philo->eat_count);
 			philo->data->num_finished_eating++;
 			philo->eat_count++;
 		}
@@ -59,8 +76,6 @@ void	*routine(void	*param)
 		return ((void *) 1);
 	while (philo->data->dead == 0)
 	{
-		if (&philo->r_fork == &philo->l_fork)
-			return ((void *) 1);
 		eat(philo);
 		message("is sleeping", philo);
 		ft_usleep(philo->data->sleep_time);
@@ -81,12 +96,18 @@ int	thread_init(t_data *data)
 		if (pthread_create(&t0, NULL, &mealchecker, data))
 			return (error("error whilst creating mealchecker", data));
 	i = -1;
-	while (++i < data->philo_num && !ft_usleep(1))
+	while (++i < data->philo_num)
+	{
 		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			return (error("error whilst creating supervisor threads", data));
+		ft_usleep(1);
+	}
 	i = -1;
 	while (++i < data->philo_num)
 		if (pthread_join(data->tid[i], NULL))
+			return (error("error whilst joining threads", data));
+	if (data->meal_num > 0)
+		if (pthread_join(t0, NULL))
 			return (error("error whilst joining threads", data));
 	return (0);
 }
