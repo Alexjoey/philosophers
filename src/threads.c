@@ -39,10 +39,8 @@ void	*mealchecker(void *param)
 
 	data = (t_data *)param;
 	while (data->dead == 0)
-	{
 		if (data->num_finished_eating == data->philo_num)
 			data->dead = 1;
-	}
 	return ((void *)0);
 }
 
